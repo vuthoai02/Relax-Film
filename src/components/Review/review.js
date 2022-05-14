@@ -11,6 +11,8 @@ import {
   Drawer,
   Typography,
   IconButton,
+  Link,
+  CircularProgress,
 } from "@mui/material";
 import React, { useState } from "react";
 import axios from "axios";
@@ -24,6 +26,9 @@ export default function Review(props) {
   const [valueDrawer, setValueDrawer] = useState(null);
   const [open, setOpen] = useState(false);
   const [tapPhim, setTapPhim] = useState(0);
+  const account = JSON.parse(localStorage.getItem("account"));
+  const location = window.location.pathname;
+  console.log(location);
   React.useEffect(() => {
     const loaddata = async () => {
       const response = await axios.get(
@@ -31,24 +36,57 @@ export default function Review(props) {
       );
       const data = response.data.data;
       setFilm(data);
-      setDanhMuc([
-        {
-          label: "Phim Trung Quốc",
-          phim: data.filter((elm) => elm.attributes.country === "Trung Quốc"),
-        },
-        {
-          label: "Phim Âu Mỹ",
-          phim: data.filter((elm) => elm.attributes.country === "Âu Mỹ"),
-        },
-        {
-          label: "Phim Hành động",
-          phim: data.filter((elm) => elm.attributes.kind.includes("Hành động")),
-        },
-        {
-          label: "Phim Phiêu Lưu",
-          phim: data.filter((elm) => elm.attributes.kind.includes("lưu")),
-        },
-      ]);
+      if(location !== "/the-loai"){
+        setDanhMuc([
+          {
+            label: "Phim Trung Quốc",
+            phim: data.filter((elm) => elm.attributes.country === "Trung Quốc"),
+          },
+          {
+            label: "Phim Âu Mỹ",
+            phim: data.filter((elm) => elm.attributes.country === "Âu Mỹ"),
+          },
+          {
+            label: "Phim Hành động",
+            phim: data.filter((elm) => elm.attributes.kind.includes("Hành động")),
+          },
+          {
+            label: "Phim Phiêu Lưu",
+            phim: data.filter((elm) => elm.attributes.kind.includes("lưu")),
+          },
+        ]);
+      }else{
+        setDanhMuc([
+          {
+            label: "Phim Trung Quốc",
+            phim: data.filter((elm) => elm.attributes.country === "Trung Quốc"),
+          },
+          {
+            label: "Phim Âu Mỹ",
+            phim: data.filter((elm) => elm.attributes.country === "Âu Mỹ"),
+          },
+          {
+            label: "Phim Hành động",
+            phim: data.filter((elm) => elm.attributes.kind.includes("Hành động")),
+          },
+          {
+            label: "Phim Phiêu Lưu",
+            phim: data.filter((elm) => elm.attributes.kind.includes("lưu")),
+          },
+          {
+            label: "Phim Tâm Lý",
+            phim: data.filter((elm) => elm.attributes.kind.includes("lý")),
+          },
+          {
+            label: "Phim Viễn Tưởng",
+            phim: data.filter((elm) => elm.attributes.kind.includes("tưởng")),
+          },
+          {
+            label: "Phim Hình Sự",
+            phim: data.filter((elm) => elm.attributes.kind.includes("sự")),
+          },
+        ]);
+      }
     };
     loaddata();
   }, []);
@@ -56,30 +94,34 @@ export default function Review(props) {
     <Grid item xs={12} style={{ marginTop: "8vh", padding: "10px" }}>
       {film ? (
         <>
-          <Typography
-            variant="h4"
-            style={{ padding: "5px 10px", color: "yellow" }}
-          >
-            Phim mới ra mắt
-          </Typography>
-          <Divider style={{ marginBottom: "10px" }} />
-          <Slide>
-            {film.map((elm, index) => (
-              <div className="each-slide" key={index}>
-                <div style={{ backgroundColor: "#000" }}>
-                  <img
-                    alt=""
-                    src={elm.attributes.img_url}
-                    style={{
-                      width: "30%",
-                      marginLeft: "35%",
-                      maxHeight: "700px",
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </Slide>
+          {location !== "/the-loai" ? (
+            <>
+              <Typography
+                variant="h4"
+                style={{ padding: "5px 10px", color: "yellow" }}
+              >
+                Phim mới ra mắt
+              </Typography>
+              <Divider style={{ marginBottom: "10px" }} />
+              <Slide>
+                {film.map((elm, index) => (
+                  <div className="each-slide" key={index}>
+                    <div style={{ backgroundColor: "#000" }}>
+                      <img
+                        alt=""
+                        src={elm.attributes.img_url}
+                        style={{
+                          width: "30%",
+                          marginLeft: "35%",
+                          maxHeight: "700px",
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </Slide>
+            </>
+          ) : null}
           <Typography
             variant="h4"
             style={{ padding: "5px 10px", color: "yellow" }}
@@ -166,24 +208,60 @@ export default function Review(props) {
                       <b>{valueDrawer.attributes.name}</b>
                     </Typography>
                   </Box>
-                  <Box style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+                  <Box
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <iframe
                       src={
-                        valueDrawer.attributes.episodes[0].server_data[tapPhim]?.link_embed
+                        valueDrawer.attributes.episodes[0].server_data[tapPhim]
+                          ?.link_embed
                       }
                       width="80%"
                       height="800px"
+                      allowFullScreen
                       style={{ margin: "5px 10%" }}
                     ></iframe>
                     <Box style={{ width: "80%" }}>
-                      <Typography style={{color:'#fff'}}>Tập phim:</Typography>
+                      <Typography style={{ color: "#fff" }}>
+                        Tập phim:
+                      </Typography>
                       {valueDrawer.attributes.episodes[0].server_data.map(
                         (elm, index) => (
-                          <Button style={{color:'#fff', border:'1px solid #fff', margin:'5px',backgroundColor:index === tapPhim?'green':null}} onClick={() => setTapPhim(index)}>
-                            {index +1}
+                          <Button
+                            style={{
+                              color: "#fff",
+                              border: "1px solid #fff",
+                              margin: "5px",
+                              backgroundColor:
+                                index === tapPhim ? "green" : null,
+                            }}
+                            onClick={() => setTapPhim(index)}
+                          >
+                            {index + 1}
                           </Button>
                         )
                       )}
+                      <Typography style={{ color: "#fff" }}>
+                        Tải xuống:
+                        {account?.accept ? (
+                          <a
+                            href={
+                              valueDrawer.attributes.episodes[0].server_data[
+                                tapPhim
+                              ]?.link_m3u8
+                            }
+                          >
+                            Tại đây
+                          </a>
+                        ) : (
+                          <Link href="/dang-nhap">Đăng nhập</Link>
+                        )}
+                      </Typography>
                     </Box>
                     <Paper
                       style={{
@@ -214,7 +292,14 @@ export default function Review(props) {
             ) : null}
           </Grid>
         </>
-      ) : null}
+      ) : (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+          <Typography style={{ marginLeft: "10px" }}>
+            Đợi một chút...
+          </Typography>
+        </Box>
+      )}
     </Grid>
   );
 }

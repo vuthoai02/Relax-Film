@@ -5,64 +5,77 @@ import {
   Toolbar,
   Typography,
   Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tooltip,
-  Button,
-  InputBase
+  InputBase,
+  Link,
+  Button
 } from "@mui/material";
-import MenuIcon from "@material-ui/icons/Menu";
-import { styled, alpha } from '@mui/material/styles';
-import SearchIcon from '@material-ui/icons/Search';
+import { styled, alpha } from "@mui/material/styles";
+import SearchIcon from "@material-ui/icons/Search";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
+  "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
-    width: 'auto',
+    width: "auto",
   },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
+  color: "inherit",
+  "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
     },
   },
 }));
 
-export default function Appbar() {
-  const pages = ["Trang chủ", "Thể loại"];
-  const settings = ["Profile", "Account", "Dashboard", "Logout"];
-  
+export default function Appbar(props) {
+  const pages = [
+    {
+      label: "Trang chủ",
+      link: "/",
+    },
+    {
+      label: "Thể loại",
+      link: "/",
+    },
+  ];
+
   return (
     <>
-      <AppBar position="static" style={{ backgroundColor: "black",height:'8vh',position:'fixed',top:0,zIndex:1 }}>
+      <AppBar
+        position="static"
+        style={{
+          backgroundColor: "black",
+          height: "8vh",
+          position: "fixed",
+          top: 0,
+          zIndex: 1,
+        }}
+      >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
@@ -82,7 +95,7 @@ export default function Appbar() {
             >
               RELAXFILM
             </Typography>
-
+{/* 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -106,13 +119,13 @@ export default function Appbar() {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page}>
-                    <Typography textAlign="center">{page}</Typography>
+                 {pages.map((page,index) => (
+                  <MenuItem key={index}>
+                    <Link href={page.link}><Typography textAlign="center">{page.label}</Typography></Link>
                   </MenuItem>
-                ))}
+                ))} 
               </Menu>
-            </Box>
+            </Box> */}
             {/* <Typography
               variant="h5"
               noWrap
@@ -132,14 +145,15 @@ export default function Appbar() {
               LOGO
             </Typography> */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  // onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
+              {pages.map((page,index) => (
+                <Link
+                  key={index}
+                  href={page.link}
+                  underline="none"
+                  style={{color: "white", display: "block", margin:'0 10px'}}
                 >
-                  {page}
-                </Button>
+                  {page.label}
+                </Link>
               ))}
             </Box>
             <Box>
@@ -154,30 +168,11 @@ export default function Appbar() {
               </Search>
             </Box>
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton sx={{ p: 0 }}>
-                  <MenuIcon style={{ color: "#fff" }} />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
+              {props.account?.accept?(
+                <Button onClick={() => localStorage.setItem('account',JSON.stringify({...props.account,accept:false}))} style={{color:'#fff'}}>Đăng xuất</Button>
+              ):(
+                <Button onClick={()=> window.location.assign("/dang-nhap")} style={{color:'#fff'}}>Đăng nhập</Button>
+              )}
             </Box>
           </Toolbar>
         </Container>
