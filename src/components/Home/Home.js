@@ -3,7 +3,7 @@ import {
   Grid,
 } from "@mui/material";
 import Appbar from "../Menu/Menu";
-import { BrowserRouter as Router,Route, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import {ROUTER} from '../../utils/routers';
 
 import Review from "../Review/review";
