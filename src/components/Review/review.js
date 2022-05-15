@@ -148,7 +148,7 @@ export default function Review(props) {
                     <Typography style={{ fontSize: "18px" }}>
                       <b>{elm.label}</b>
                     </Typography>
-                    <div style={{ display: "flex", flexDirection:"row",flexWrap:'wrap',justifyContent:'center',alignItems:'center' }}>
+                    <div style={{ display: "flex", flexDirection:"row",flexWrap:'wrap',justifyContent:mobileMode?'center':'normal',alignItems:mobileMode?'center':'normal' }}>
                       {elm.phim.map((data, ind) => (
                         <Card key={ind} style={{ margin:mobileMode?"10px":"0 10px", width:mobileMode?"230px":'auto' }}>
                           <CardActions>
