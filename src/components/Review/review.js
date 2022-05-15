@@ -28,7 +28,7 @@ export default function Review(props) {
   const [tapPhim, setTapPhim] = useState(0);
   const account = JSON.parse(localStorage.getItem("account"));
   const location = window.location.pathname;
-  console.log(location);
+  const mobileMode = window.innerWidth <= 768;
   React.useEffect(() => {
     const loaddata = async () => {
       const response = await axios.get(
@@ -40,19 +40,19 @@ export default function Review(props) {
         setDanhMuc([
           {
             label: "Phim Trung Quốc",
-            phim: data.filter((elm) => elm.attributes.country === "Trung Quốc"),
+            phim: data.filter((elm) => elm.attributes.country === "Trung Quốc").slice(0,5),
           },
           {
             label: "Phim Âu Mỹ",
-            phim: data.filter((elm) => elm.attributes.country === "Âu Mỹ"),
+            phim: data.filter((elm) => elm.attributes.country === "Âu Mỹ").slice(0,5),
           },
           {
             label: "Phim Hành động",
-            phim: data.filter((elm) => elm.attributes.kind.includes("Hành động")),
+            phim: data.filter((elm) => elm.attributes.kind.includes("Hành động")).slice(0,5),
           },
           {
             label: "Phim Phiêu Lưu",
-            phim: data.filter((elm) => elm.attributes.kind.includes("lưu")),
+            phim: data.filter((elm) => elm.attributes.kind.includes("lưu")).slice(0,5),
           },
         ]);
       }else{
@@ -114,6 +114,7 @@ export default function Review(props) {
                           width: "30%",
                           marginLeft: "35%",
                           maxHeight: "700px",
+                          height:mobileMode?'200px':'auto'
                         }}
                       />
                     </div>
@@ -142,14 +143,14 @@ export default function Review(props) {
                   <Paper
                     key={index}
                     elevation={3}
-                    style={{ padding: "20px", width: "80%", margin: "10px 0" }}
+                    style={{ padding: "20px", width:mobileMode?"95%":"80%", margin: "10px 0" }}
                   >
                     <Typography style={{ fontSize: "18px" }}>
                       <b>{elm.label}</b>
                     </Typography>
-                    <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div style={{ display: "flex", flexDirection:"row",flexWrap:'wrap' }}>
                       {elm.phim.map((data, ind) => (
-                        <Card key={ind} style={{ margin: "0 10px" }}>
+                        <Card key={ind} style={{ margin:mobileMode?"10px":"0 10px", width:mobileMode?"230px":'auto' }}>
                           <CardActions>
                             <Button
                               onClick={() => {
@@ -163,7 +164,7 @@ export default function Review(props) {
                             >
                               <CardMedia
                                 component="img"
-                                style={{ width: "300px", height: "440px" }}
+                                style={{ width:mobileMode?"200px":"300px", height: mobileMode?"250px":"440px" }}
                                 image={data.attributes.img_url}
                                 alt=""
                               />
@@ -181,6 +182,7 @@ export default function Review(props) {
                         </Card>
                       ))}
                     </div>
+                    {location ==='/' &&<Button onClick={() => window.location.assign('/the-loai')}>Xem thêm</Button>}
                   </Paper>
                 ))}
               </>
@@ -204,7 +206,7 @@ export default function Review(props) {
                     >
                       <ArrowBackIcon />
                     </IconButton>
-                    <Typography variant="h4" style={{ color: "#fff" }}>
+                    <Typography variant={mobileMode?"h6":"h4"} style={{ color: "#fff" }}>
                       <b>{valueDrawer.attributes.name}</b>
                     </Typography>
                   </Box>
@@ -221,8 +223,8 @@ export default function Review(props) {
                         valueDrawer.attributes.episodes[0].server_data[tapPhim]
                           ?.link_embed
                       }
-                      width="80%"
-                      height="800px"
+                      width={mobileMode?"90%":"80%"}
+                      height={mobileMode?"300px":"800px"}
                       allowFullScreen
                       style={{ margin: "5px 10%" }}
                     ></iframe>

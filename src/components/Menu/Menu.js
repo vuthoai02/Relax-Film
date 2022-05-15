@@ -7,10 +7,20 @@ import {
   Box,
   InputBase,
   Link,
-  Button
+  Button,
+  Drawer,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemText,
+  ListItemIcon,
 } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@material-ui/icons/Search";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from '@mui/icons-material/Home';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import LoginIcon from '@mui/icons-material/Login';
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -42,7 +52,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -53,130 +62,183 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Appbar(props) {
+  const [open, setOpen] = React.useState(false);
+  const { account } = props;
   const pages = [
     {
       label: "Trang chủ",
       link: "/",
+      icon:<HomeIcon />
     },
     {
       label: "Thể loại",
       link: "/",
+      icon:<ListAltIcon />
     },
   ];
 
+  const mobileMode = window.innerWidth <= 768;
+
   return (
     <>
-      <AppBar
-        position="static"
-        style={{
-          backgroundColor: "black",
-          height: "8vh",
-          position: "fixed",
-          top: 0,
-          zIndex: 1,
-        }}
-      >
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
+      {mobileMode ? (
+        <>
+          <AppBar
+            style={{
+              backgroundColor: "black",
+              height: "5vh",
+              position: "fixed",
+              top: 0,
+              zIndex: 1,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
             <Typography
-              variant="h6"
-              noWrap
-              component="a"
               href="/"
+              component="a"
               sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
                 fontFamily: "monospace",
-                fontWeight: 700,
                 letterSpacing: ".1rem",
                 color: "inherit",
                 textDecoration: "none",
+                margin: "15px 10px",
+                width: "100px",
               }}
             >
-              RELAXFILM
+              <b>RELAXFILM</b>
             </Typography>
-{/* 
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                color="inherit"
-              ></IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
+            <IconButton
+              onClick={() => setOpen(true)}
+              style={{ display: "inline-block", width: "100px", color: "#fff" }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </AppBar>
+          <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
+            <Box style={{width:'40vw'}}>
+              <List>
+                {pages.map((elm, index) => (
+                  <ListItemButton
+                    key={index}
+                    onClick={() => {
+                      setOpen(false);
+                      window.location.assign(elm.link);
+                    }}
+                  >
+                    <ListItemIcon>{elm.icon}</ListItemIcon>
+                    <ListItemText primary={elm.label} />
+                  </ListItemButton>
+                ))}
+                {account?.accept ? (
+                  <ListItemButton
+                    onClick={() => {
+                      setOpen(false);
+                      window.location.assign("/");
+                    }}
+                  >
+                    <ListItemIcon><LoginIcon /></ListItemIcon>
+                    <ListItemText primary={"Đăng xuất"} />
+                  </ListItemButton>
+                ) : (
+                  <ListItemButton
+                    onClick={() => {
+                      setOpen(false);
+                      window.location.assign("/dang-nhap");
+                    }}
+                  >
+                    <ListItemIcon><LoginIcon /></ListItemIcon>
+                    <ListItemText primary={"Đăng nhập"} />
+                  </ListItemButton>
+                )}
+              </List>
+            </Box>
+          </Drawer>
+        </>
+      ) : (
+        <AppBar
+          position="static"
+          style={{
+            backgroundColor: "black",
+            height: "8vh",
+            position: "fixed",
+            top: 0,
+            zIndex: 1,
+          }}
+        >
+          <Container maxWidth="xl">
+            <Toolbar disableGutters>
+              <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                href="/"
                 sx={{
-                  display: { xs: "block", md: "none" },
+                  mr: 2,
+                  display: { xs: "none", md: "flex" },
+                  fontFamily: "monospace",
+                  fontWeight: 700,
+                  letterSpacing: ".1rem",
+                  color: "inherit",
+                  textDecoration: "none",
                 }}
               >
-                 {pages.map((page,index) => (
-                  <MenuItem key={index}>
-                    <Link href={page.link}><Typography textAlign="center">{page.label}</Typography></Link>
-                  </MenuItem>
-                ))} 
-              </Menu>
-            </Box> */}
-            {/* <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href=""
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              LOGO
-            </Typography> */}
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page,index) => (
-                <Link
-                  key={index}
-                  href={page.link}
-                  underline="none"
-                  style={{color: "white", display: "block", margin:'0 10px'}}
-                >
-                  {page.label}
-                </Link>
-              ))}
-            </Box>
-            <Box>
-              <Search>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Search…"
-                  inputProps={{ "aria-label": "search" }}
-                />
-              </Search>
-            </Box>
-            <Box sx={{ flexGrow: 0 }}>
-              {props.account?.accept?(
-                <Button onClick={() => localStorage.setItem('account',JSON.stringify({...props.account,accept:false}))} style={{color:'#fff'}}>Đăng xuất</Button>
-              ):(
-                <Button onClick={()=> window.location.assign("/dang-nhap")} style={{color:'#fff'}}>Đăng nhập</Button>
-              )}
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
+                RELAXFILM
+              </Typography>
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                {pages.map((page, index) => (
+                  <Link
+                    key={index}
+                    href={page.link}
+                    underline="none"
+                    style={{
+                      color: "white",
+                      display: "block",
+                      margin: "0 10px",
+                    }}
+                  >
+                    {page.label}
+                  </Link>
+                ))}
+              </Box>
+              <Box>
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ "aria-label": "search" }}
+                  />
+                </Search>
+              </Box>
+              <Box sx={{ flexGrow: 0 }}>
+                {props.account?.accept ? (
+                  <Button
+                    onClick={() =>
+                      localStorage.setItem(
+                        "account",
+                        JSON.stringify({ ...props.account, accept: false })
+                      )
+                    }
+                    style={{ color: "#fff" }}
+                  >
+                    Đăng xuất
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => window.location.assign("/dang-nhap")}
+                    style={{ color: "#fff" }}
+                  >
+                    Đăng nhập
+                  </Button>
+                )}
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
+      )}
     </>
   );
 }

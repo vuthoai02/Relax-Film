@@ -26,6 +26,7 @@ export default function Login(props) {
     showPassword: false,
   });
   const [error,setError] = React.useState(false);
+  const mobileMode = window.innerWidth <= 768;
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
@@ -54,8 +55,8 @@ export default function Login(props) {
 
   return (
     <>
-      <Grid item xs={12} style={{ marginTop: "8vh", display:'flex',justifyContent:'center',alignItems:'center',height:'100vh' }}>
-        <Paper style={{ padding: "20px 20px 20px 90px",width:'20%', display:'flex', flexDirection:'column', alignContent:'center', justifyContent:'center' }}>
+      <Grid item xs={12} style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh' }}>
+        <Paper style={{ padding: "20px 20px 20px 90px",width:mobileMode?'60%':'20%', display:'flex', flexDirection:'column', alignContent:'center', justifyContent:'center' }}>
           <div>
           </div>
           <Typography variant="h5"><b>Đăng nhập</b></Typography>
@@ -72,7 +73,7 @@ export default function Login(props) {
             />
           </div>
           <div style={{ marginTop: "10px",display:'inline-block' }}>
-            <FormControl sx={{ m: 1, width: "33.5ch", padding:0, margin:'0' }} variant="outlined">
+            <FormControl sx={{ m: 1, width: mobileMode?"30ch":"33.5ch", padding:0, margin:'0' }} variant="outlined">
               <InputLabel htmlFor="password">
                 Password
               </InputLabel>
