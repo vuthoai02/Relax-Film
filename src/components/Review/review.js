@@ -148,7 +148,7 @@ export default function Review(props) {
                     <Typography style={{ fontSize: "18px" }}>
                       <b>{elm.label}</b>
                     </Typography>
-                    <div style={{ display: "flex", flexDirection:"row",flexWrap:'wrap' }}>
+                    <div style={{ display: "flex", flexDirection:"row",flexWrap:'wrap',justifyContent:'center',alignItems:'center' }}>
                       {elm.phim.map((data, ind) => (
                         <Card key={ind} style={{ margin:mobileMode?"10px":"0 10px", width:mobileMode?"230px":'auto' }}>
                           <CardActions>
@@ -224,7 +224,7 @@ export default function Review(props) {
                           ?.link_embed
                       }
                       width={mobileMode?"90%":"80%"}
-                      height={mobileMode?"300px":"800px"}
+                      height={mobileMode?"250px":"800px"}
                       allowFullScreen
                       style={{ margin: "5px 10%" }}
                     ></iframe>

@@ -86,7 +86,7 @@ export default function Appbar(props) {
           <AppBar
             style={{
               backgroundColor: "black",
-              height: "5vh",
+              height: "6vh",
               position: "fixed",
               top: 0,
               zIndex: 1,
@@ -103,7 +103,7 @@ export default function Appbar(props) {
                 letterSpacing: ".1rem",
                 color: "inherit",
                 textDecoration: "none",
-                margin: "15px 10px",
+                margin: "10px",
                 width: "100px",
               }}
             >
@@ -117,7 +117,7 @@ export default function Appbar(props) {
             </IconButton>
           </AppBar>
           <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-            <Box style={{width:'40vw'}}>
+            <Box style={{width:'50vw'}}>
               <List>
                 {pages.map((elm, index) => (
                   <ListItemButton
