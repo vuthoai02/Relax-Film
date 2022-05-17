@@ -72,7 +72,7 @@ export default function Appbar(props) {
     },
     {
       label: "Thể loại",
-      link: "/",
+      link: "/the-loai",
       icon:<ListAltIcon />
     },
   ];

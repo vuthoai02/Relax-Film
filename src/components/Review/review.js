@@ -36,26 +36,34 @@ export default function Review(props) {
       );
       const data = response.data.data;
       setFilm(data);
-      if(location !== "/the-loai"){
+      if (location !== "/the-loai") {
         setDanhMuc([
           {
             label: "Phim Trung Quốc",
-            phim: data.filter((elm) => elm.attributes.country === "Trung Quốc").slice(0,5),
+            phim: data
+              .filter((elm) => elm.attributes.country === "Trung Quốc")
+              .slice(0, 4),
           },
           {
             label: "Phim Âu Mỹ",
-            phim: data.filter((elm) => elm.attributes.country === "Âu Mỹ").slice(0,5),
+            phim: data
+              .filter((elm) => elm.attributes.country === "Âu Mỹ")
+              .slice(0, 4),
           },
           {
             label: "Phim Hành động",
-            phim: data.filter((elm) => elm.attributes.kind.includes("Hành động")).slice(0,5),
+            phim: data
+              .filter((elm) => elm.attributes.kind.includes("Hành động"))
+              .slice(0, 4),
           },
           {
             label: "Phim Phiêu Lưu",
-            phim: data.filter((elm) => elm.attributes.kind.includes("lưu")).slice(0,5),
+            phim: data
+              .filter((elm) => elm.attributes.kind.includes("lưu"))
+              .slice(0, 4),
           },
         ]);
-      }else{
+      } else {
         setDanhMuc([
           {
             label: "Phim Trung Quốc",
@@ -67,7 +75,9 @@ export default function Review(props) {
           },
           {
             label: "Phim Hành động",
-            phim: data.filter((elm) => elm.attributes.kind.includes("Hành động")),
+            phim: data.filter((elm) =>
+              elm.attributes.kind.includes("Hành động")
+            ),
           },
           {
             label: "Phim Phiêu Lưu",
@@ -84,6 +94,22 @@ export default function Review(props) {
           {
             label: "Phim Hình Sự",
             phim: data.filter((elm) => elm.attributes.kind.includes("sự")),
+          },
+          {
+            label: "Phim Âm Nhạc",
+            phim: data.filter((elm) => elm.attributes.kind.includes("nhạc")),
+          },
+          {
+            label: "Phim Lẻ",
+            phim: data.filter((elm) => elm.attributes.type === 'odd'),
+          },
+          {
+            label: "Phim Chính Kịch, Tình Cảm",
+            phim: data.filter((elm) => elm.attributes.kind.includes("kịch")||elm.attributes.kind.includes("cảm")),
+          },
+          {
+            label: "Hoạt Hình",
+            phim: data.filter((elm) => elm.attributes.type === 'hoathinh'),
           },
         ]);
       }
@@ -103,21 +129,37 @@ export default function Review(props) {
                 Phim mới ra mắt
               </Typography>
               <Divider style={{ marginBottom: "10px" }} />
-              <Slide>
-                {film.map((elm, index) => (
-                  <div className="each-slide" key={index}>
-                    <div style={{ backgroundColor: "#000" }}>
+              <Slide slidesToShow={3}>
+                {film.slice(-10).map((elm, index) => (
+                  <div
+                    className="each-slide"
+                    key={index}
+                    style={{ marginLeft: "25%" }}
+                  >
+                    <Button
+                      onClick={() => {
+                        setValueDrawer(elm);
+                        setOpen(!open);
+                      }}
+                      style={{
+                        width: "320px",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
                       <img
                         alt=""
                         src={elm.attributes.img_url}
                         style={{
-                          width: "30%",
-                          marginLeft: "35%",
+                          width: "300px",
                           maxHeight: "700px",
-                          height:mobileMode?'200px':'auto'
+                          height: mobileMode ? "200px" : "400px",
                         }}
                       />
-                    </div>
+                      <Typography style={{ marginTop: "10px", color: "#fff" }}>
+                        {elm.attributes.name}
+                      </Typography>
+                    </Button>
                   </div>
                 ))}
               </Slide>
@@ -143,14 +185,32 @@ export default function Review(props) {
                   <Paper
                     key={index}
                     elevation={3}
-                    style={{ padding: "20px", width:mobileMode?"95%":"80%", margin: "10px 0" }}
+                    style={{
+                      padding: "20px",
+                      width: mobileMode ? "95%" : "80%",
+                      margin: "10px 0",
+                    }}
                   >
                     <Typography style={{ fontSize: "18px" }}>
                       <b>{elm.label}</b>
                     </Typography>
-                    <div style={{ display: "flex", flexDirection:"row",flexWrap:'wrap',justifyContent:mobileMode?'center':'normal',alignItems:mobileMode?'center':'normal' }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        justifyContent: mobileMode ? "center" : "normal",
+                        alignItems: mobileMode ? "center" : "normal",
+                      }}
+                    >
                       {elm.phim.map((data, ind) => (
-                        <Card key={ind} style={{ margin:mobileMode?"10px":"0 10px", width:mobileMode?"230px":'auto' }}>
+                        <Card
+                          key={ind}
+                          style={{
+                            margin:"10px",
+                            width: mobileMode ? "230px" : "auto",
+                          }}
+                        >
                           <CardActions>
                             <Button
                               onClick={() => {
@@ -164,7 +224,10 @@ export default function Review(props) {
                             >
                               <CardMedia
                                 component="img"
-                                style={{ width:mobileMode?"200px":"300px", height: mobileMode?"250px":"440px" }}
+                                style={{
+                                  width: mobileMode ? "200px" : "300px",
+                                  height: mobileMode ? "250px" : "440px",
+                                }}
                                 image={data.attributes.img_url}
                                 alt=""
                               />
@@ -182,7 +245,13 @@ export default function Review(props) {
                         </Card>
                       ))}
                     </div>
-                    {location ==='/' &&<Button onClick={() => window.location.assign('/the-loai')}>Xem thêm</Button>}
+                    {location === "/" && (
+                      <Button
+                        onClick={() => window.location.assign("/the-loai")}
+                      >
+                        Xem thêm
+                      </Button>
+                    )}
                   </Paper>
                 ))}
               </>
@@ -206,7 +275,10 @@ export default function Review(props) {
                     >
                       <ArrowBackIcon />
                     </IconButton>
-                    <Typography variant={mobileMode?"h6":"h4"} style={{ color: "#fff" }}>
+                    <Typography
+                      variant={mobileMode ? "h6" : "h4"}
+                      style={{ color: "#fff" }}
+                    >
                       <b>{valueDrawer.attributes.name}</b>
                     </Typography>
                   </Box>
@@ -223,8 +295,8 @@ export default function Review(props) {
                         valueDrawer.attributes.episodes[0].server_data[tapPhim]
                           ?.link_embed
                       }
-                      width={mobileMode?"90%":"80%"}
-                      height={mobileMode?"250px":"800px"}
+                      width={mobileMode ? "90%" : "80%"}
+                      height={mobileMode ? "250px" : "800px"}
                       allowFullScreen
                       style={{ margin: "5px 10%" }}
                     ></iframe>
@@ -278,6 +350,10 @@ export default function Review(props) {
                         {valueDrawer.attributes.content}
                       </Typography>
                       <Typography>
+                        <b>Trailer</b>:
+                        <a href={valueDrawer.attributes.trailer_url}>{valueDrawer.attributes.trailer_url}</a>
+                      </Typography>
+                      <Typography>
                         <b>Diễn viên</b>:{valueDrawer.attributes.actor}...
                       </Typography>
                       <Typography>
@@ -286,6 +362,10 @@ export default function Review(props) {
                       <Typography>
                         <b>Số tập</b>:{" "}
                         {valueDrawer.attributes.episodes[0].server_data.length}
+                      </Typography>
+                      <Typography>
+                        <b>Quốc gia</b>:
+                        {valueDrawer.attributes.country}
                       </Typography>
                     </Paper>
                   </Box>
