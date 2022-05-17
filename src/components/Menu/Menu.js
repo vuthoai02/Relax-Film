@@ -14,6 +14,8 @@ import {
   ListItemButton,
   ListItemText,
   ListItemIcon,
+  InputAdornment,
+  Input
 } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@material-ui/icons/Search";
@@ -63,7 +65,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function Appbar(props) {
   const [open, setOpen] = React.useState(false);
-  const { account } = props;
+  const { account,handleChange,searchValue } = props;
   const pages = [
     {
       label: "Trang chủ",
@@ -202,16 +204,19 @@ export default function Appbar(props) {
                   </Link>
                 ))}
               </Box>
-              <Box>
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ "aria-label": "search" }}
-                  />
-                </Search>
+              <Box style={{backgroundColor:'#fff',padding:'5px',borderRadius:'2px'}}>
+                <Input 
+                  id="search"
+                  type="text"
+                  value={searchValue}
+                  placeholder="Tìm kiếm"
+                  onChange={handleChange('search')}
+                  endAdornment={
+                    <InputAdornment possition="end">
+                      <IconButton onClick={() => console.log(searchValue)}><SearchIcon /></IconButton>
+                    </InputAdornment>
+                  }
+                />
               </Box>
               <Box sx={{ flexGrow: 0 }}>
                 {props.account?.accept ? (
