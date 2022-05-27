@@ -5,7 +5,6 @@ import {
   Toolbar,
   Typography,
   Box,
-  InputBase,
   Link,
   Button,
   Drawer,
@@ -15,71 +14,100 @@ import {
   ListItemText,
   ListItemIcon,
   InputAdornment,
-  Input
+  Input,
+  MenuItem,
+  Menu,
+  Accordion,
+  AccordionSummary,
+  AccordionActions
 } from "@mui/material";
-import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from '@mui/icons-material/Home';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import LoginIcon from '@mui/icons-material/Login';
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
+import HomeIcon from "@mui/icons-material/Home";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import LoginIcon from "@mui/icons-material/Login";
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
+import {ROUTER} from '../../utils/routers';
 
 export default function Appbar(props) {
   const [open, setOpen] = React.useState(false);
-  const { account,handleChange,searchValue } = props;
+  const { account, handleChange, searchValue } = props;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const mobileMode = window.innerWidth <= 768;
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (url) => {
+    window.location.assign('/the-loai' + url);
+  };
+  const handleCloseMenu = (url) => {
+    setAnchorEl(null);
+  };
   const pages = [
     {
       label: "Trang chủ",
       link: "/",
-      icon:<HomeIcon />
+      icon: <HomeIcon />,
     },
     {
       label: "Thể loại",
-      link: "/the-loai",
-      icon:<ListAltIcon />
+      icon: <ListAltIcon />,
+      render: (
+        <>
+          {mobileMode ? (
+            <Accordion>
+              <AccordionSummary ><ListAltIcon /><span style={{marginLeft:'28px'}}>Thể loại</span></AccordionSummary>
+              <AccordionActions style={{display:'flex', flexDirection:'column',alignItems:'flex-start'}}>
+                <Button onClick={() => handleClose('/phim-trung-quoc')}>Phim Trung Quốc</Button>
+                <Button onClick={() => handleClose('/phim-au-my')}>Phim Âu Mỹ</Button>
+                <Button onClick={() => handleClose('/phim-hanh-dong')}>Phim Hành động</Button>
+                <Button onClick={() => handleClose('/phim-phieu-luu')}>Phim Phiêu Lưu</Button>
+                <Button onClick={() => handleClose('/phim-tam-ly')}>Phim Tâm Lý</Button>
+                <Button onClick={() => handleClose('/phim-vien-tuong')}>Phim Viễn Tưởng</Button>
+                <Button onClick={() => handleClose('/phim-hinh-su')}>Phim Hình Sự</Button>
+                <Button onClick={() => handleClose('/phim-am-nhac')}>Phim Âm Nhạc</Button>
+                <Button onClick={() => handleClose('/phim-le')}>Phim Lẻ</Button>
+                <Button onClick={() => handleClose('/phim-tinh-cam')}>
+                  Phim Chính Kịch, Tình Cảm
+                </Button>
+                <Button onClick={() => handleClose('/hoat-hinh')}>Phim Hoạt Hình</Button>
+              </AccordionActions>
+            </Accordion>
+          ) : (
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={openMenu}
+              onClose={handleCloseMenu}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={() => handleClose('/phim-trung-quoc')}>Phim Trung Quốc</MenuItem>
+              <MenuItem onClick={() => handleClose('/phim-au-my')}>Phim Âu Mỹ</MenuItem>
+              <MenuItem onClick={() => handleClose('/phim-hanh-dong')}>Phim Hành động</MenuItem>
+              <MenuItem onClick={() => handleClose('/phim-phieu-luu')}>Phim Phiêu Lưu</MenuItem>
+              <MenuItem onClick={() => handleClose('/phim-tam-ly')}>Phim Tâm Lý</MenuItem>
+              <MenuItem onClick={() => handleClose('/phim-vien-tuong')}>Phim Viễn Tưởng</MenuItem>
+              <MenuItem onClick={() => handleClose('/phim-hinh-su')}>Phim Hình Sự</MenuItem>
+              <MenuItem onClick={() => handleClose('/phim-am-nhac')}>Phim Âm Nhạc</MenuItem>
+              <MenuItem onClick={() => handleClose('/phim-le')}>Phim Lẻ</MenuItem>
+              <MenuItem onClick={() => handleClose('/phim-tinh-cam')}>
+                Phim Chính Kịch, Tình Cảm
+              </MenuItem>
+              <MenuItem onClick={() => handleClose('/hoat-hinh')}>Phim Hoạt Hình</MenuItem>
+            </Menu>
+          )}
+        </>
+      ),
+    },
+    {
+      label: "Phim đã lưu",
+      link: "/da-luu",
+      icon: <LibraryAddIcon />,
     },
   ];
-
-  const mobileMode = window.innerWidth <= 768;
 
   return (
     <>
@@ -91,7 +119,7 @@ export default function Appbar(props) {
               height: "6vh",
               position: "fixed",
               top: 0,
-              zIndex: 1,
+              zIndex: 9999,
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
@@ -119,28 +147,40 @@ export default function Appbar(props) {
             </IconButton>
           </AppBar>
           <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-            <Box style={{width:'50vw'}}>
+            <Box style={{ width: "50vw", marginTop:'8vh' }}>
               <List>
                 {pages.map((elm, index) => (
-                  <ListItemButton
-                    key={index}
-                    onClick={() => {
-                      setOpen(false);
-                      window.location.assign(elm.link);
-                    }}
-                  >
-                    <ListItemIcon>{elm.icon}</ListItemIcon>
-                    <ListItemText primary={elm.label} />
-                  </ListItemButton>
+                  <>
+                    {elm.render ? (
+                      <>{elm.render}</>
+                    ) : (
+                      <ListItemButton
+                        key={index}
+                        onClick={() => {
+                          setOpen(false);
+                          window.location.assign(elm.link);
+                        }}
+                      >
+                        <ListItemIcon>{elm.icon}</ListItemIcon>
+                        <ListItemText primary={elm.label} />
+                      </ListItemButton>
+                    )}
+                  </>
                 ))}
-                {account?.accept ? (
+                {account ? (
                   <ListItemButton
                     onClick={() => {
                       setOpen(false);
-                      window.location.assign("/");
+                      window.location.assign(ROUTER.HOME);
+                      localStorage.setItem(
+                        "accept",
+                        false
+                      )
                     }}
                   >
-                    <ListItemIcon><LoginIcon /></ListItemIcon>
+                    <ListItemIcon>
+                      <LoginIcon />
+                    </ListItemIcon>
                     <ListItemText primary={"Đăng xuất"} />
                   </ListItemButton>
                 ) : (
@@ -150,7 +190,9 @@ export default function Appbar(props) {
                       window.location.assign("/dang-nhap");
                     }}
                   >
-                    <ListItemIcon><LoginIcon /></ListItemIcon>
+                    <ListItemIcon>
+                      <LoginIcon />
+                    </ListItemIcon>
                     <ListItemText primary={"Đăng nhập"} />
                   </ListItemButton>
                 )}
@@ -188,45 +230,80 @@ export default function Appbar(props) {
               >
                 RELAXFILM
               </Typography>
-              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  display: { xs: "none", md: "flex", alignItems: "center" },
+                }}
+              >
                 {pages.map((page, index) => (
-                  <Link
-                    key={index}
-                    href={page.link}
-                    underline="none"
-                    style={{
-                      color: "white",
-                      display: "block",
-                      margin: "0 10px",
-                    }}
-                  >
-                    {page.label}
-                  </Link>
+                  <>
+                    {page.render ? (
+                      <>
+                        <Button
+                          style={{
+                            padding: 0,
+                            color: "#fff",
+                            textTransform: "none",
+                            margin: "0 10px",
+                            display: "inline-block",
+                            fontSize: "16px",
+                          }}
+                          onClick={handleClick}
+                        >
+                          {page.label}
+                        </Button>
+                        {page.render}
+                      </>
+                    ) : (
+                      <Link
+                        key={index}
+                        href={page.link}
+                        underline="none"
+                        style={{
+                          color: "white",
+                          display: "block",
+                          margin: "0 10px",
+                        }}
+                      >
+                        {page.label}
+                      </Link>
+                    )}
+                  </>
                 ))}
               </Box>
-              <Box style={{backgroundColor:'#fff',padding:'5px',borderRadius:'2px'}}>
-                <Input 
+              <Box
+                style={{
+                  backgroundColor: "#fff",
+                  padding: "5px",
+                  borderRadius: "2px",
+                }}
+              >
+                <Input
                   id="search"
                   type="text"
                   value={searchValue}
                   placeholder="Tìm kiếm"
-                  onChange={handleChange('search')}
+                  onChange={handleChange("search")}
                   endAdornment={
                     <InputAdornment possition="end">
-                      <IconButton onClick={() => console.log(searchValue)}><SearchIcon /></IconButton>
+                      <IconButton onClick={() => console.log(searchValue)}>
+                        <SearchIcon />
+                      </IconButton>
                     </InputAdornment>
                   }
                 />
               </Box>
               <Box sx={{ flexGrow: 0 }}>
-                {props.account?.accept ? (
+                {props.account ? (
                   <Button
-                    onClick={() =>
+                    onClick={() =>{
                       localStorage.setItem(
-                        "account",
-                        JSON.stringify({ ...props.account, accept: false })
-                      )
-                    }
+                        "accept",
+                        false
+                      );
+                      window.location.assign(ROUTER.HOME);
+                    }}
                     style={{ color: "#fff" }}
                   >
                     Đăng xuất

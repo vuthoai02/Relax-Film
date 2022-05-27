@@ -19,6 +19,7 @@ import axios from "axios";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import BeenhereIcon from '@mui/icons-material/Beenhere';
 
 export default function Review(props) {
   const [film, setFilm] = useState(null);
@@ -36,7 +37,7 @@ export default function Review(props) {
       );
       const data = response.data.data;
       setFilm(data);
-      if (location !== "/the-loai") {
+      if (location.includes('the-loai)') === false) {
         setDanhMuc([
           {
             label: "Phim Trung Quốc",
@@ -64,58 +65,78 @@ export default function Review(props) {
           },
         ]);
       } else {
-        setDanhMuc([
-          {
+        if(location.includes('/phim-trung-quoc')){
+          setDanhMuc([{
             label: "Phim Trung Quốc",
             phim: data.filter((elm) => elm.attributes.country === "Trung Quốc"),
-          },
-          {
+          }]);
+        }
+        else if(location.includes('/phim-au-my')){
+          setDanhMuc([{
             label: "Phim Âu Mỹ",
             phim: data.filter((elm) => elm.attributes.country === "Âu Mỹ"),
-          },
-          {
+          }]);
+        }
+        else if(location.includes('/phim-hanh-dong')){
+          setDanhMuc([{
             label: "Phim Hành động",
             phim: data.filter((elm) =>
               elm.attributes.kind.includes("Hành động")
             ),
-          },
-          {
+          }]);
+        }
+        else if(location.includes('/phim-phieu-luu')){
+          setDanhMuc([{
             label: "Phim Phiêu Lưu",
             phim: data.filter((elm) => elm.attributes.kind.includes("lưu")),
-          },
-          {
+          }]);
+        }
+        else if(location.includes('/phim-tam-ly')){
+          setDanhMuc([{
             label: "Phim Tâm Lý",
             phim: data.filter((elm) => elm.attributes.kind.includes("lý")),
-          },
-          {
+          }]);
+        }
+        else if(location.includes('/phim-vien-tuong')){
+          setDanhMuc([{
             label: "Phim Viễn Tưởng",
             phim: data.filter((elm) => elm.attributes.kind.includes("tưởng")),
-          },
-          {
+          }]);
+        }
+        else if(location.includes('/phim-hinh-su')){
+          setDanhMuc([{
             label: "Phim Hình Sự",
             phim: data.filter((elm) => elm.attributes.kind.includes("sự")),
-          },
-          {
+          }]);
+        }
+        else if(location.includes('/phim-am-nhac')){
+          setDanhMuc([{
             label: "Phim Âm Nhạc",
             phim: data.filter((elm) => elm.attributes.kind.includes("nhạc")),
-          },
-          {
+          }]);
+        }
+        else if(location.includes('/phim-le')){
+          setDanhMuc([{
             label: "Phim Lẻ",
             phim: data.filter((elm) => elm.attributes.type === "odd"),
-          },
-          {
+          }]);
+        }
+        else if(location.includes('/phim-tinh-cam')){
+          setDanhMuc([{
             label: "Phim Chính Kịch, Tình Cảm",
             phim: data.filter(
               (elm) =>
                 elm.attributes.kind.includes("kịch") ||
                 elm.attributes.kind.includes("cảm")
             ),
-          },
-          {
+          }]);
+        }
+        else if(location.includes('/hoat-hinh')){
+          setDanhMuc([{
             label: "Hoạt Hình",
             phim: data.filter((elm) => elm.attributes.type === "hoathinh"),
-          },
-        ]);
+          }]);
+        }
       }
     };
     loaddata();
@@ -145,7 +166,7 @@ export default function Review(props) {
                       key={index}
                       style={{
                         margin: "10px",
-                        width: mobileMode ? "230px" : "auto",
+                        width: mobileMode ? "200px" : "auto",
                       }}
                     >
                       <CardActions>
@@ -185,7 +206,7 @@ export default function Review(props) {
             </>
           ) : (
             <>
-              {location !== "/the-loai" ? (
+              {location.includes('the-loai') === false ? (
                 <>
                   <Typography
                     variant="h4"
@@ -370,9 +391,10 @@ export default function Review(props) {
                           width={mobileMode ? "90%" : "80%"}
                           height={mobileMode ? "250px" : "800px"}
                           allowFullScreen
-                          style={{ margin: "5px 10%" }}
+                          style={{ margin: "10px 10%" }}
                         ></iframe>
                         <Box style={{ width: "80%" }}>
+                          <Button variant="contained" onClick={() => props.handleSaveFilm(valueDrawer)}><BeenhereIcon />Thêm vào xem sau</Button>
                           <Typography style={{ color: "#fff" }}>
                             Tập phim:
                           </Typography>
@@ -394,7 +416,7 @@ export default function Review(props) {
                           )}
                           <Typography style={{ color: "#fff" }}>
                             Tải xuống:
-                            {account?.accept ? (
+                            {account ? (
                               <a
                                 href={
                                   valueDrawer.attributes.episodes[0]
