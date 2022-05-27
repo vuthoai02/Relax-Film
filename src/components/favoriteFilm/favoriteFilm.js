@@ -8,7 +8,7 @@ import axios from "axios";
 
 export default function FavoriteFilm(props) {
 
-  const datas = props.datas?.[0].attributes.data;
+  const datas = props.datas?.[0]?.attributes.data;
   const mobileMode = window.innerWidth <= 768;
   const [open, setOpen] = useState(false);
   const [valueDrawer, setValueDrawer] = useState(null);
