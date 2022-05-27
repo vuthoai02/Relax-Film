@@ -89,7 +89,7 @@ export default function Home() {
           <Route exact path={ROUTER.THE_LOAI.PHIM_LE} element={<Review save={filmSave} handleSaveFilm={handleSaveFilm} searchValue={searchValue} />} />
           <Route exact path={ROUTER.THE_LOAI.PHIM_TINH_CAM} element={<Review save={filmSave} handleSaveFilm={handleSaveFilm} searchValue={searchValue} />} />
           <Route exact path={ROUTER.THE_LOAI.HOAT_HINH} element={<Review searchValue={searchValue} />} />
-          <Route exact path={ROUTER.DA_LUU} element={<FavoriteFilm userId={filmSave?.[0]?.attributes.userId} id={filmSave?.[0]?.id} datas={filmSave} searchValue={searchValue} />} />
+          <Route exact path={ROUTER.DA_LUU} element={<FavoriteFilm userId={id} id={filmSave?.[0]?.id} datas={filmSave} searchValue={searchValue} />} />
           <Route exact path={ROUTER.DANG_KY} element={<Register />} />
           <Route exact path={ROUTER.DANG_NHAP} element={<Login accountCheck={accountCheck} />} />
         </Routes>
