@@ -20,6 +20,7 @@ import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import BeenhereIcon from '@mui/icons-material/Beenhere';
+import {ROUTER} from '../../utils/routers';
 
 export default function Review(props) {
   const [film, setFilm] = useState(null);
@@ -37,47 +38,21 @@ export default function Review(props) {
       );
       const data = response.data.data;
       setFilm(data);
-      if (location.includes('the-loai)') === false) {
-        setDanhMuc([
-          {
-            label: "Phim Trung Quốc",
-            phim: data
-              .filter((elm) => elm.attributes.country === "Trung Quốc")
-              .slice(0, 4),
-          },
-          {
-            label: "Phim Âu Mỹ",
-            phim: data
-              .filter((elm) => elm.attributes.country === "Âu Mỹ")
-              .slice(0, 4),
-          },
-          {
-            label: "Phim Hành động",
-            phim: data
-              .filter((elm) => elm.attributes.kind.includes("Hành động"))
-              .slice(0, 4),
-          },
-          {
-            label: "Phim Phiêu Lưu",
-            phim: data
-              .filter((elm) => elm.attributes.kind.includes("lưu"))
-              .slice(0, 4),
-          },
-        ]);
-      } else {
-        if(location.includes('/phim-trung-quoc')){
+      if (location.includes('the-loai')) {
+        console.log(location.includes('the-loai'))
+        if (location.includes('/phim-trung-quoc')) {
           setDanhMuc([{
             label: "Phim Trung Quốc",
             phim: data.filter((elm) => elm.attributes.country === "Trung Quốc"),
           }]);
         }
-        else if(location.includes('/phim-au-my')){
+        else if (location.includes('/phim-au-my')) {
           setDanhMuc([{
             label: "Phim Âu Mỹ",
             phim: data.filter((elm) => elm.attributes.country === "Âu Mỹ"),
           }]);
         }
-        else if(location.includes('/phim-hanh-dong')){
+        else if (location.includes('/phim-hanh-dong')) {
           setDanhMuc([{
             label: "Phim Hành động",
             phim: data.filter((elm) =>
@@ -85,43 +60,43 @@ export default function Review(props) {
             ),
           }]);
         }
-        else if(location.includes('/phim-phieu-luu')){
+        else if (location.includes('/phim-phieu-luu')) {
           setDanhMuc([{
             label: "Phim Phiêu Lưu",
             phim: data.filter((elm) => elm.attributes.kind.includes("lưu")),
           }]);
         }
-        else if(location.includes('/phim-tam-ly')){
+        else if (location.includes('/phim-tam-ly')) {
           setDanhMuc([{
             label: "Phim Tâm Lý",
             phim: data.filter((elm) => elm.attributes.kind.includes("lý")),
           }]);
         }
-        else if(location.includes('/phim-vien-tuong')){
+        else if (location.includes('/phim-vien-tuong')) {
           setDanhMuc([{
             label: "Phim Viễn Tưởng",
             phim: data.filter((elm) => elm.attributes.kind.includes("tưởng")),
           }]);
         }
-        else if(location.includes('/phim-hinh-su')){
+        else if (location.includes('/phim-hinh-su')) {
           setDanhMuc([{
             label: "Phim Hình Sự",
             phim: data.filter((elm) => elm.attributes.kind.includes("sự")),
           }]);
         }
-        else if(location.includes('/phim-am-nhac')){
+        else if (location.includes('/phim-am-nhac')) {
           setDanhMuc([{
             label: "Phim Âm Nhạc",
             phim: data.filter((elm) => elm.attributes.kind.includes("nhạc")),
           }]);
         }
-        else if(location.includes('/phim-le')){
+        else if (location.includes('/phim-le')) {
           setDanhMuc([{
             label: "Phim Lẻ",
             phim: data.filter((elm) => elm.attributes.type === "odd"),
           }]);
         }
-        else if(location.includes('/phim-tinh-cam')){
+        else if (location.includes('/phim-tinh-cam')) {
           setDanhMuc([{
             label: "Phim Chính Kịch, Tình Cảm",
             phim: data.filter(
@@ -131,12 +106,45 @@ export default function Review(props) {
             ),
           }]);
         }
-        else if(location.includes('/hoat-hinh')){
+        else if (location.includes('/hoat-hinh')) {
           setDanhMuc([{
             label: "Hoạt Hình",
             phim: data.filter((elm) => elm.attributes.type === "hoathinh"),
           }]);
         }
+      } else {
+        console.log(location.includes('the-loai'))
+
+        setDanhMuc([
+          {
+            label: "Phim Trung Quốc",
+            to:ROUTER.THE_LOAI.PHIM_TRUNG,
+            phim: data
+              .filter((elm) => elm.attributes.country === "Trung Quốc")
+              .slice(0, 4),
+          },
+          {
+            label: "Phim Âu Mỹ",
+            to:ROUTER.THE_LOAI.PHIM_MY,
+            phim: data
+              .filter((elm) => elm.attributes.country === "Âu Mỹ")
+              .slice(0, 4),
+          },
+          {
+            label: "Phim Hành động",
+            to:ROUTER.THE_LOAI.PHIM_HANH_DONG,
+            phim: data
+              .filter((elm) => elm.attributes.kind.includes("Hành động"))
+              .slice(0, 4),
+          },
+          {
+            label: "Phim Phiêu Lưu",
+            to:ROUTER.THE_LOAI.PHIM_PHIEU_LUU,
+            phim: data
+              .filter((elm) => elm.attributes.kind.includes("lưu"))
+              .slice(0, 4),
+          },
+        ]);
       }
     };
     loaddata();
@@ -215,12 +223,12 @@ export default function Review(props) {
                     Phim mới ra mắt
                   </Typography>
                   <Divider style={{ marginBottom: "10px" }} />
-                  <Slide slidesToShow={mobileMode?1:3}>
+                  <Slide slidesToShow={mobileMode ? 1 : 3}>
                     {film.slice(-10).map((elm, index) => (
                       <div
                         className="each-slide"
                         key={index}
-                        style={{ marginLeft: mobileMode?"20%":"25%" }}
+                        style={{ marginLeft: mobileMode ? "3%" : "25%" }}
                       >
                         <Button
                           onClick={() => {
@@ -237,7 +245,7 @@ export default function Review(props) {
                             alt=""
                             src={elm.attributes.img_url}
                             style={{
-                              width: mobileMode?"150px":"300px",
+                              width: mobileMode ? "150px" : "300px",
                               maxHeight: "700px",
                               height: mobileMode ? "200px" : "400px",
                             }}
@@ -335,7 +343,7 @@ export default function Review(props) {
                         </div>
                         {location === "/" && (
                           <Button
-                            onClick={() => window.location.assign("/the-loai")}
+                            onClick={() => window.location.assign(elm.to)}
                           >
                             Xem thêm
                           </Button>
