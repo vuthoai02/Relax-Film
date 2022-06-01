@@ -13,11 +13,12 @@ import {
   Link
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import {ROUTER} from "../../utils/routers";
+import { ROUTER } from "../../utils/routers";
+import axios from "axios";
 
 export default function Register() {
   const [values, setValues] = React.useState({
-    userName:"",
+    userName: "",
     amount: "",
     password: "",
     weight: "",
@@ -40,20 +41,33 @@ export default function Register() {
     event.preventDefault();
   };
 
-  const handleSubmit = () =>{
-    const account = {userName:values.userName,password:values.password,accept:false}
-    localStorage.setItem('account',JSON.stringify(account));
-    window.location.assign(ROUTER.DANG_NHAP);
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const response = await axios.post('https://filmserverrelax.herokuapp.com/api/accounts', {
+      data: {
+        email: values.userName,
+        password: values.password
+      }
+    },
+    {
+      "content-type": "application/json",
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjUzNTQ0NjA4LCJleHAiOjE2NTYxMzY2MDh9._TNfETDmzyLaacHg8pN8ntZl6pNS8S3Xw9Ejv6ai38s'
+    })
+    if(response.status === 200){
+      localStorage.setItem('id',response.data.data.id);
+      window.location.assign(ROUTER.DANG_NHAP);
+    }
   }
 
   return (
     <>
-      <Grid item xs={12} style={{ display:'flex',justifyContent:'center',alignItems:'center',height:'100vh' }}>
-        <Paper style={{ padding: "20px 20px 20px 90px",width:mobileMode?'60%':'20%', display:'flex', flexDirection:'column', alignContent:'center', justifyContent:'center' }}>
+      <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Paper style={{ padding: "20px 20px 20px 90px", width: mobileMode ? '60%' : '20%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: 'center' }}>
           <div>
           </div>
           <Typography variant="h5"><b>Đăng ký tài khoản</b></Typography>
-          <div style={{marginTop:'10px',display:'inline-block'}}>
+          <div style={{ marginTop: '10px', display: 'inline-block' }}>
             <TextField
               id="userName"
               label="Tên đăng nhập"
@@ -61,11 +75,11 @@ export default function Register() {
               maxRows={4}
               value={values.userName}
               onChange={handleChange("userName")}
-              style={{width:'80%'}}
+              style={{ width: '80%' }}
             />
           </div>
-          <div style={{ marginTop: "10px",display:'inline-block' }}>
-            <FormControl sx={{ m: 1, width: mobileMode?"30ch":"33.5ch", padding:0, margin:'0' }} variant="outlined">
+          <div style={{ marginTop: "10px", display: 'inline-block' }}>
+            <FormControl sx={{ m: 1, width: mobileMode ? "30ch" : "33.5ch", padding: 0, margin: '0' }} variant="outlined">
               <InputLabel htmlFor="password">
                 Password
               </InputLabel>
@@ -90,7 +104,7 @@ export default function Register() {
               />
             </FormControl>
           </div>
-          <Button onClick={handleSubmit} variant="contained" style={{margin:'10px 0', width:'80%'}}>Đăng ký</Button>
+          <Button onClick={handleSubmit} variant="contained" style={{ margin: '10px 0', width: '80%' }}>Đăng ký</Button>
           <Link underline="none" href="/"> Quay lại trang chủ</Link>
         </Paper>
       </Grid>
